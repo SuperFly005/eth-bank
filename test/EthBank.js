@@ -16,29 +16,29 @@ describe("EthBank", function() {
 
   it("Can't register twice", async function () {
     deployedEthBank.register();
-    await expect(deployedEthBank.register()).to.be.revertedWith("You have already registered");
+    expect(deployedEthBank.register()).to.be.revertedWith("You have already registered");
   });
 
   it("Can't deposit ETH before registration", async function () {
-    await expect(deployedEthBank.deposit(ethers.utils.parseEther("1"), {value: ethers.utils.parseEther("1")})).to.be.revertedWith("Please register first");
+    expect(deployedEthBank.deposit(ethers.utils.parseEther("1"), {value: ethers.utils.parseEther("1")})).to.be.revertedWith("Please register first");
   });
 
   it("Can deposit ETH after registration", async function () {
     await deployedEthBank.register();
     await deployedEthBank.deposit(ethers.utils.parseEther("1"), {value: ethers.utils.parseEther("1")});
-    await expect(await deployedEthBank.getBalance()).to.equal(ethers.utils.parseEther("1"));
+    expect(await deployedEthBank.getBalance()).to.equal(ethers.utils.parseEther("1"));
   })
 
   it("Can Witdraw from the bank", async function () {
     await deployedEthBank.register();
     await deployedEthBank.deposit(ethers.utils.parseEther("1"), {value: ethers.utils.parseEther("1")});
     await deployedEthBank.withdraw(ethers.utils.parseEther("0.5"));
-    await expect(await deployedEthBank.getBalance()).to.equal(ethers.utils.parseEther("0.5"));
+    expect(await deployedEthBank.getBalance()).to.equal(ethers.utils.parseEther("0.5"));
   })
 
   it("Can't Witdraw bigger amount than balance", async function () {
     await deployedEthBank.register();
     await deployedEthBank.deposit(ethers.utils.parseEther("1"), {value: ethers.utils.parseEther("1")});
-    await expect(deployedEthBank.withdraw(ethers.utils.parseEther("2"))).to.be.revertedWith("Not enough ETH in the bank");
+    expect(deployedEthBank.withdraw(ethers.utils.parseEther("2"))).to.be.revertedWith("Not enough ETH in the bank");
   })
 });

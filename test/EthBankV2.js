@@ -21,13 +21,13 @@ describe("EthBankV2", function() {
       const EthBankV2 = await ethers.getContractFactory('EthBankV2');
       const upgradedEthBank = await upgrades.upgradeProxy(deployedEthBankAddress, EthBankV2);
 
-      await expect(upgradedEthBank.address).to.equal(deployedEthBankAddress);
+      expect(upgradedEthBank.address).to.equal(deployedEthBankAddress);
 
       await upgradedEthBank.connect(owner).register();
       await upgradedEthBank.connect(addr).register();
       await upgradedEthBank.connect(owner).deposit(ethers.utils.parseEther("1"), {value: ethers.utils.parseEther("1")});
       await upgradedEthBank.connect(owner).transfer(addr.address, ethers.utils.parseEther("0.5"));
-      await expect(await upgradedEthBank.connect(owner).getBalance()).to.equal(ethers.utils.parseEther("0.5"));
-      await expect(await upgradedEthBank.connect(addr).getBalance()).to.equal(ethers.utils.parseEther("0.5"));
+      expect(await upgradedEthBank.connect(owner).getBalance()).to.equal(ethers.utils.parseEther("0.5"));
+      expect(await upgradedEthBank.connect(addr).getBalance()).to.equal(ethers.utils.parseEther("0.5"));
   });
 });
